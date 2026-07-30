@@ -1,0 +1,9 @@
+@
+/__pycache__/
+/*.py
+/*.wav
+/WhatsApp*
+/test_audio
+.env
+.env.*
+
