@@ -7,7 +7,10 @@ export function streamChat(query, { onText, onAudioChunk, onDone, onError }) {
     try {
       const res = await fetch(`${API_BASE_URL}/chat/stream`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true", // bypasses ngrok's interstitial warning page
+        },
         body: JSON.stringify({ query }),
         signal: controller.signal,
       });
