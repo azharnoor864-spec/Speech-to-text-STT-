@@ -13,9 +13,8 @@ import { useState, useRef, useCallback } from "react";
  *  - stopRecording(): stops capture, resolves with the transcript text
  *  - error: any permission/recording error message
  */
-// Backend URL comes from Frontend/.env (VITE_BACKEND_URL=http://127.0.0.1:8000)
-// Falls back to relative path if the env var isn't set (e.g. production build
-// served from the same FastAPI server, where relative paths work fine).
+// Backend URL comes from Vercel env var VITE_BACKEND_URL (set this to your
+// ngrok/production backend URL — falls back to relative path if unset).
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
 
 export function useAudioRecorder({ transcribeUrl = `${BACKEND_URL}/api/transcribe` } = {}) {
@@ -85,6 +84,9 @@ export function useAudioRecorder({ transcribeUrl = `${BACKEND_URL}/api/transcrib
 
           const response = await fetch(transcribeUrl, {
             method: "POST",
+            headers: {
+              "ngrok-skip-browser-warning": "true", // bypasses ngrok's interstitial warning page
+            },
             body: formData,
           });
 

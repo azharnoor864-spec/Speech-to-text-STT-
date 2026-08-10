@@ -11,9 +11,8 @@ import { useAudioRecorder } from "../hooks/useAudioRecorder";
  *   record -> /api/transcribe -> transcript -> setInputText(transcript)
  *   -> submitQuery(transcript) -> /api/query -> run_rag_query() -> answer
  */
-// Backend URL comes from Frontend/.env (VITE_BACKEND_URL=http://127.0.0.1:8000)
-// Falls back to relative path if the env var isn't set (e.g. production build
-// served from the same FastAPI server, where relative paths work fine).
+// Backend URL comes from Vercel env var VITE_BACKEND_URL (set this to your
+// ngrok/production backend URL — falls back to relative path if unset).
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
 
 export function useChatWithVoice() {
@@ -42,7 +41,10 @@ export function useChatWithVoice() {
       // 2. Send to the EXISTING /api/query endpoint (Day 20/21 RAG flow)
       const response = await fetch(`${BACKEND_URL}/api/query`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true", // bypasses ngrok's interstitial warning page
+        },
         body: JSON.stringify({ query: queryText }),
       });
 
